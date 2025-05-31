@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Listing, Booking
+from .models import Listing, Booking, Review
 
 class ListingSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -15,3 +15,11 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = ['id', 'listing', 'user', 'start_date', 'end_date', 'total_price', 'status', 'created_at']
+
+class ReviewSerializer(serializers.ModelSerializer):
+    listing = serializers.PrimaryKeyRelatedField(queryset=Listing.objects.all())
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Review
+        fields = ['id', 'listing', 'user', 'rating', 'comment', 'created_at']
